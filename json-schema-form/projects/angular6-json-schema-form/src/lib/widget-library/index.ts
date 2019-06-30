@@ -21,13 +21,21 @@ import { TabsComponent } from './tabs.component';
 import { TemplateComponent } from './template.component';
 import { TextareaComponent } from './textarea.component';
 
+// custom components
+import { AutoCompleteComponent } from './autocomplete.component';
+import { TableComponent } from './table.component';
+import { FieldsetComponent } from './fieldset.component';
+import { DatetimeComponent } from './datetime.component';
+import { LabelComponent } from './label.component';
+
 export const BASIC_WIDGETS = [
   AddReferenceComponent, OneOfComponent, ButtonComponent, CheckboxComponent,
   CheckboxesComponent, FileComponent, HiddenComponent, InputComponent,
   MessageComponent, NoneComponent, NumberComponent, RadiosComponent,
   RootComponent, SectionComponent, SelectComponent, SelectFrameworkComponent,
   SelectWidgetComponent, SubmitComponent, TabComponent, TabsComponent,
-  TemplateComponent, TextareaComponent
+  TemplateComponent, TextareaComponent, TableComponent, FieldsetComponent,
+  AutoCompleteComponent, DatetimeComponent, LabelComponent
 ];
 
 export { AddReferenceComponent } from './add-reference.component';
@@ -54,3 +62,10 @@ export { TabsComponent } from './tabs.component';
 export { TemplateComponent } from './template.component';
 export { TextareaComponent } from './textarea.component';
 export { WidgetLibraryService } from './widget-library.service';
+
+// custom components
+export { TableComponent } from './table.component';
+export { FieldsetComponent } from './fieldset.component';
+export { AutoCompleteComponent } from './autocomplete.component';
+export { DatetimeComponent } from './datetime.component';
+export { LabelComponent } from './label.component';

@@ -1,4 +1,5 @@
 import cloneDeep from 'lodash-es/cloneDeep';
+import keys from 'lodash-es/keys';
 import Ajv from 'ajv';
 import jsonDraft6 from 'ajv/lib/refs/json-schema-draft-06.json';
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
@@ -51,6 +52,11 @@ export class JsonSchemaFormService {
   ajv: any = new Ajv(this.ajvOptions); // AJV: Another JSON Schema Validator
   validateFormData: any = null; // Compiled AJV function to validate active form's schema
 
+  public initialValues: any = {}; // The initial data model (e.g. previously submitted data)
+  public customSavedData: any;
+  public isUpdated = false;
+  public isTable = false;
+
   formValues: any = {}; // Internal form data (may not have correct types)
   data: any = {}; // Output form data (formValues, formatted with correct data types)
   schema: any = {}; // Internal JSON Schema
@@ -92,7 +98,7 @@ export class JsonSchemaFormService {
     formDisabled: false, // Set entire form as disabled? (not editable, and disables outputs)
     formReadonly: false, // Set entire form as read only? (not editable, but outputs still enabled)
     fieldsRequired: false, // (set automatically) Are there any required fields in the form?
-    framework: 'no-framework', // The framework to load
+    framework: 'bootstrap-3', // The framework to load
     loadExternalAssets: false, // Load external css and JavaScript for framework?
     pristine: { errors: true, success: true },
     supressPropertyTitles: false,
@@ -512,13 +518,20 @@ export class JsonSchemaFormService {
   }
 
   updateValue(ctx: any, value: any): void {
-
+    let tempData = ctx.jsf.data;
     // Set value of current control
     ctx.controlValue = value;
     if (ctx.boundControl) {
       ctx.formControl.setValue(value);
       ctx.formControl.markAsDirty();
     }
+    // To Do... - Nithya..
+    this.isUpdated = false;
+    this.isTable = ctx.layoutHead === undefined ? false : true;
+    tempData = this.updateObjects(tempData, ctx.jsf.data);
+    // if (ctx.selectList == undefined)
+    ctx.jsf.data = tempData;
+    ctx.jsf.dataChanges.next(ctx.jsf.data);
     ctx.layoutNode.value = value;
 
     // Set values of any related controls in copyValueTo array
@@ -551,6 +564,93 @@ export class JsonSchemaFormService {
       }
     }
     formArray.markAsDirty();
+  }
+
+  removeNonArrayObjects(obj) {
+    if (obj.length) {
+    } else {
+      if (keys(obj).length != 0) {
+        for (const prop in obj) {
+          const val = obj[prop];
+          if (typeof val == 'object') {
+            this.removeNonArrayObjects(val);
+          } else if (typeof val == 'string') {
+            obj[prop] = '';
+          } else {
+            obj[prop] = {};
+          }
+        }
+      }
+    }
+  }
+
+  updateEmptyObjects(obj, value) {
+    if (value != undefined) {
+      for (const prop in obj) {
+        const val = value[prop];
+        if ((typeof val == 'object' && val.length == undefined)) {
+          this.updateEmptyObjects(obj[prop], val);
+        } else if (val == undefined && typeof obj[prop] == 'object' && obj[prop].length == undefined) {
+          if (keys(obj[prop]).length !== 0) {
+            if (obj[prop] !== undefined) {
+              this.updateEmptyObjects(obj[prop], val);
+            } else {
+              obj[prop] = {};
+            }
+          } else {
+            obj[prop] = {};
+          }
+        } else if (val == undefined && typeof obj[prop] !== 'object') {
+          obj[prop] = '';
+             }
+      }
+    } else {
+      for (const prop in obj) {
+        if (typeof obj[prop] == 'object' && obj[prop].length !== undefined) {
+          obj[prop] = obj[prop];
+        } else if (typeof obj[prop] == 'object') {
+          obj[prop] = {};
+             } else if (typeof obj[prop] == 'string') {
+          obj[prop] = '';
+             }
+      }
+    }
+    return obj;
+  };
+
+  updateObjects(obj, value) {
+    for (let i = 1; i < arguments.length; i++) {
+      if (keys(arguments[i]).length == 0) {
+        this.removeNonArrayObjects(obj);
+      } else {
+        if (!this.isUpdated) {
+          if (typeof(obj) == 'string' && typeof(value) == 'string') {
+            this.isUpdated = true;
+          } else {
+            this.updateEmptyObjects(obj, value);
+            this.isUpdated = true;
+        }
+      }
+      }
+      for (const prop in arguments[i]) {
+        const val = arguments[i][prop];
+        if (typeof val == 'object' && val.length == undefined) {
+          if (obj[prop] == undefined) {
+            obj[prop] = {};
+          }
+          this.updateObjects(obj[prop], val);
+        } else if (this.isTable && val.length != undefined && typeof val !== 'string') {
+          this.updateObjects(obj[prop], val);
+             } else if (!this.isTable && typeof val == 'object' && val.length == undefined) {
+          obj[prop] = val;
+             } else if (!this.isTable && typeof val == 'string') {
+          obj[prop] = val;
+             } else if (!this.isTable && typeof val == 'object' && val.length != undefined) {
+          obj[prop] = val;
+             }
+      }
+    }
+    return obj;
   }
 
   getFormControl(ctx: any): AbstractControl {

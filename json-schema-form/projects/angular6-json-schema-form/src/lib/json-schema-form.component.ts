@@ -75,13 +75,13 @@ export const JSON_SCHEMA_FORM_VALUE_ACCESSOR: any = {
   // tslint:disable-next-line:component-selector
   selector: 'json-schema-form',
   template: `
-    <div *ngFor="let stylesheet of stylesheets">
+    <!-- <div *ngFor="let stylesheet of stylesheets">
       <link rel="stylesheet" [href]="stylesheet">
     </div>
     <div *ngFor="let script of scripts">
       <script type="text/javascript" [src]="script"></script>
-    </div>
-    <form [autocomplete]="jsf?.formOptions?.autocomplete ? 'on' : 'off'" class="json-schema-form" (ngSubmit)="submitForm()">
+    </div> -->
+    <form class="json-schema-form" (ngSubmit)="submitForm()">
       <root-widget [layout]="jsf?.layout"></root-widget>
     </form>
     <div *ngIf="debug || jsf?.formOptions?.debug">
@@ -174,6 +174,7 @@ export class JsonSchemaFormComponent implements ControlValueAccessor, OnChanges,
     private sanitizer: DomSanitizer
   ) { }
 
+  /*
   get stylesheets(): SafeResourceUrl[] {
     const stylesheets = this.frameworkLibrary.getFrameworkStylesheets();
     const load = this.sanitizer.bypassSecurityTrustResourceUrl;
@@ -184,7 +185,7 @@ export class JsonSchemaFormComponent implements ControlValueAccessor, OnChanges,
     const scripts = this.frameworkLibrary.getFrameworkScripts();
     const load = this.sanitizer.bypassSecurityTrustResourceUrl;
     return scripts.map(script => load(script));
-  }
+  }*/
 
   ngOnInit() {
     this.updateForm();

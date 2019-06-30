@@ -4,9 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JsonSchemaFormService } from '../json-schema-form.service';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { OrderableDirective } from './orderable.directive';
+import { MyDatePickerModule } from 'mydatepicker';
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
 @NgModule({
-  imports:         [ CommonModule, FormsModule, ReactiveFormsModule ],
+  imports:         [ CommonModule, FormsModule, ReactiveFormsModule, MyDatePickerModule, NguiAutoCompleteModule ],
   declarations:    [ ...BASIC_WIDGETS, OrderableDirective ],
   exports:         [ ...BASIC_WIDGETS, OrderableDirective ],
   entryComponents: [ ...BASIC_WIDGETS ],

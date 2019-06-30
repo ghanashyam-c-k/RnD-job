@@ -10,6 +10,12 @@
       "lodash-es/filter": "lodash-es",
       "lodash-es/map": "lodash-es",
       "lodash-es/uniqueId": "lodash-es",
+      "lodash-es/uniqWith": "lodash-es",
+      "lodash-es/merge": "lodash-es",
+      "lodash-es/clone": "lodash-es",
+      "lodash-es/keys": "lodash-es",
+      "@ngui/auto-complete": "@ngui/auto-complete",
+      "mydatepicker": "mydatepicker",
       "ajv": "ajv",
       "ajv/lib/refs/json-schema-draft-06.json": "jsonDraft6"
     }

@@ -58,9 +58,11 @@
     "@angular/platform-browser": "7.0.0",
     "@angular/platform-browser-dynamic": "7.0.0",
     "@angular/router": "7.0.0",
+    "@ngui/auto-complete": "^2.0.0",
     "brace": "0.11.1",
     "core-js": "2.5.4",
     "lodash-es": "4.17.11",
+    "mydatepicker": "^2.6.6",
     "rxjs": "6.0.0",
     "zone.js": "0.8.26"
   },
